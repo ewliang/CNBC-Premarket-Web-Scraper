@@ -1,0 +1,37 @@
+{
+  "name": "cnbc-premarket-webscraper",
+  "version": "1.0.0",
+  "description": "A web scraper created using Cheerio library on the backend to scrape the stock market prediction data off of CNBC's premarket page.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ewliang/CNBC-Premarket-Web-Scraper.git"
+  },
+  "keywords": [
+    "webscraper",
+    "cheerio",
+    "stock",
+    "market",
+    "cnbc",
+    "premarket",
+    "scraper"
+  ],
+  "author": "Eric Liang <ericwliang94@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/ewliang/CNBC-Premarket-Web-Scraper/issues"
+  },
+  "homepage": "https://github.com/ewliang/CNBC-Premarket-Web-Scraper#readme",
+  "devDependencies": {
+    "nodemon": "^1.18.5"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.4"
+  }
+}
