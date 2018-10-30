@@ -16,8 +16,17 @@ app.get('/scrape', (req, res) => {
     // Store retrieved HTML data
     let html = response.data;
     // Parse and Scrape using Cheerio
-    const $ = cheerio.load(html);
-    console.log($('.unit').attr('itemprop', 'mainContentOfPage').html());
+    var $ = cheerio.load(html);
+    // Main Container
+    let mainHTML = $('.unit').attr('itemprop', 'mainContentOfPage').html();
+    $ = cheerio.load(mainHTML);
+    // Parse, Scrape, and Store Future Charts
+    var futureCharts = [];
+    $('.future-chart').each((i, chart) => {
+      futureCharts.push($(chart).html());
+    });
+
+    res.send(futureRows);
   })
   .catch((err) => {
     console.log(err);
