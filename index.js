@@ -1,23 +1,37 @@
-const axios = require('axios');
 const puppeteer = require('puppeteer');
 const express = require('express');
 const app = express();
 const port = 4000 || process.env.PORT;
+const url = 'https://www.cnbc.com/pre-markets/';
 
 app.get('/', (req, res) => {
   res.send('Welcome to the CNBC Premarket Webscraper!');
 });
 
 app.get('/scrape', (req, res) => {
-  let url = 'https://www.cnbc.com/pre-markets/';
   // Get CNBC Premarket Webpage HTML Document
-  axios.get(url)
-  .then((response) => {
+  let scrape = async () => {
+    // Initial Required Setup
+    const browser = await puppeteer.launch({
+      headless: false,
+      args: [`--window-size=411,731`]
+    }); // headless: true = no preview mode
+    const page = await browser.newPage();
+    await page.setViewport({ width: 411, height: 731 });
+    await page.goto(url);
+    await page.waitFor(3000);
+    const result = await page.evaluate(() => {
+      return document.querySelector('.future-chart').textContent;
+    });
+    return result;
+    //browser.close();
+  };
 
-  })
-  .catch((err) => {
-    console.log(err);
+  scrape().then((value) => {
+    console.log('k ' + value);
   });
 });
+
+
 
 app.listen(port, () => console.log(`CNBC Premarket Webscraper is listening on Port ${port}`));
