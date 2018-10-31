@@ -1,5 +1,5 @@
 const axios = require('axios');
-const cheerio = require('cheerio');
+const puppeteer = require('puppeteer');
 const express = require('express');
 const app = express();
 const port = 4000 || process.env.PORT;
@@ -13,20 +13,7 @@ app.get('/scrape', (req, res) => {
   // Get CNBC Premarket Webpage HTML Document
   axios.get(url)
   .then((response) => {
-    // Store retrieved HTML data
-    let html = response.data;
-    // Parse and Scrape using Cheerio
-    var $ = cheerio.load(html);
-    // Main Container
-    let mainHTML = $('.unit').attr('itemprop', 'mainContentOfPage').html();
-    $ = cheerio.load(mainHTML);
-    // Parse, Scrape, and Store Future Charts
-    var futureCharts = [];
-    $('.future-chart').each((i, chart) => {
-      futureCharts.push($(chart).html());
-    });
 
-    res.send(futureRows);
   })
   .catch((err) => {
     console.log(err);
