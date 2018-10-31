@@ -14,21 +14,26 @@ app.get('/scrape', (req, res) => {
     // Initial Required Setup
     const browser = await puppeteer.launch({
       headless: false,
-      args: [`--window-size=411,731`]
+      args: [`--window-size=720,720`]
     }); // headless: true = no preview mode
     const page = await browser.newPage();
-    await page.setViewport({ width: 411, height: 731 });
     await page.goto(url);
     await page.waitFor(3000);
     const result = await page.evaluate(() => {
-      return document.querySelector('.future-chart').textContent;
+      // DOW
+      let change = document.querySelector('[data-field="change"]').textContent;
+      let impliedChange = document.querySelector('[data-field="fv_change"]').textContent;
+      return {
+        change,
+        impliedChange
+      }
     });
     return result;
-    //browser.close();
+    browser.close();
   };
 
   scrape().then((value) => {
-    console.log('k ' + value);
+    console.log('Scraped: ' + value.change + 'xxxxxx' + value.impliedChange);
   });
 });
 
