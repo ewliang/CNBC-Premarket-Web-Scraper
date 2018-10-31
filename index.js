@@ -13,19 +13,31 @@ app.get('/scrape', (req, res) => {
   let scrape = async () => {
     // Initial Required Setup
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       args: [`--window-size=720,720`]
     }); // headless: true = no preview mode
     const page = await browser.newPage();
     await page.goto(url);
     await page.waitFor(3000);
     const result = await page.evaluate(() => {
+      // Scrape Data
       // DOW
-      let change = document.querySelector('[data-field="change"]').textContent;
-      let impliedChange = document.querySelector('[data-field="fv_change"]').textContent;
+      let changeDOW = document.querySelector('#cnbc-contents > div > section > div.unit.col1 > div > div > table:nth-child(3) > tbody > tr > td.last').textContent;
+      let impliedChangeDOW = document.querySelector('#cnbc-contents > div > section > div.unit.col1 > div > div > table:nth-child(4) > tbody > tr > td.last').textContent;
+      // SP500
+      let changeSP500 = document.querySelector('#cnbc-contents > div > section > div.unit.col1 > div > div.flex_chart.future-chart.last > table:nth-child(3) > tbody > tr > td.last').textContent;
+      let impliedChangeSP500 = document.querySelector('#cnbc-contents > div > section > div.unit.col1 > div > div.flex_chart.future-chart.last > table:nth-child(4) > tbody > tr > td.last').textContent;
+      // NASDAQ
+      let changeNASDAQ = document.querySelector('#cnbc-contents > div > section > div.unit.col1 > div > div > table:nth-child(3) > tbody > tr > td.last').textContent;
+      let impliedChangeNASDAQ = document.querySelector('#cnbc-contents > div > section > div.unit.col1 > div > div > table:nth-child(4) > tbody > tr > td.last').textContent;
+
       return {
-        change,
-        impliedChange
+        changeDOW,
+        impliedChangeDOW,
+        changeSP500,
+        impliedChangeSP500,
+        changeNASDAQ,
+        impliedChangeNASDAQ
       }
     });
     return result;
@@ -33,7 +45,10 @@ app.get('/scrape', (req, res) => {
   };
 
   scrape().then((value) => {
-    console.log('Scraped: ' + value.change + 'xxxxxx' + value.impliedChange);
+    console.log('<<<======= [ CNBC PREMARKET DATA ] =======>>>');
+    console.log('DOW    === Change ' + value.changeDOW + ' | Implied Change ' + value.impliedChangeDOW);
+    console.log('SP500  === Change ' + value.changeSP500 + ' | Implied Change ' + value.impliedChangeSP500);
+    console.log('NASDAQ === Change ' + value.changeNASDAQ + ' | Implied Change ' + value.impliedChangeNASDAQ);
   });
 });
 
